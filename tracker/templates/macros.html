@@ -1,0 +1,183 @@
+{% macro script(filename) %}
+<script type='text/javascript' src='{{url_for('static',filename=filename)}}'></script>
+{% endmacro %}
+
+{% macro field(form, fieldname,class='', fieldclass='') -%}
+
+{%- if form.errors.get(fieldname,None) -%}
+{% set class='error' %}
+{% set error='error' %}
+{% endif %}
+
+<div class="control-group {{class ~" "~ error}}">
+{% set field=form.__getattribute__(fieldname) %}
+
+<label class='control-label'>{{field.label.text}}
+    {%- if field.flags.required -%}
+    <span class='warning'> * </span>
+    {%- endif -%}
+  </label>
+  <div class='controls'>
+    {{ field(class=fieldclass,**kwargs) }}
+    {% if error %}
+    <span class="help-inline">
+      {{-form.errors.get(fieldname,None)|nonone|first-}}
+    </span>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %} 
+
+{% macro field_prepend(form, fieldname, prepend,class='', fieldclass='') -%}
+
+{%- if form.errors.get(fieldname,None) -%}
+{% set class='error' %}
+{% set error='error' %}
+{% endif %}
+
+<div class="control-group {{class ~" "~ error}}">
+{% set field=form.__getattribute__(fieldname) %}
+
+<label class='control-label'>{{field.label.text}}
+    {%- if field.flags.required -%}
+    <span class='warning'> * </span>
+    {%- endif -%}
+  </label>
+  <div class='controls'>
+    <div class='input-prepend'>
+      <span class='add-on'>$</span> 
+      {{ field(class="span2 "~fieldclass,**kwargs) }}
+    </div>
+    {% if error %}
+    <span class="help-inline">
+      {{-form.errors.get(fieldname,None)|nonone|first-}}
+    </span>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %} 
+
+{% macro field_append(form, fieldname, append,class='', fieldclass='') -%}
+
+{%- if form.errors.get(fieldname,None) -%}
+{% set class='error' %}
+{% set error='error' %}
+{% endif %}
+
+<div class="control-group {{class ~" "~ error}}">
+{% set field=form.__getattribute__(fieldname) %}
+
+<label class='control-label'>{{field.label.text}}
+    {%- if field.flags.required -%}
+    <span class='warning'> * </span>
+    {%- endif -%}
+  </label>
+  <div class='controls'>
+    <div class='input-append'>
+      {{ field(class="span2 "~fieldclass,**kwargs) }}
+      <span class='add-on'>$</span> 
+    </div>
+    {% if error %}
+    <span class="help-inline">
+      {{-form.errors.get(fieldname,None)|nonone|first-}}
+    </span>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %} 
+
+{% macro date(form, fieldname, format='yyyy-mm-dd',class='', fieldclass='') -%}
+{%- if form.errors.get(fieldname,None) -%}
+{% set class='error' %}
+{% set error='error' %}
+{% endif %}
+
+<div class="control-group {{class ~" "~ error}}">
+{% set field=form.__getattribute__(fieldname) %}
+
+<label class='control-label'>{{field.label.text}}
+    {%- if field.flags.required -%}
+    <span class='warning'> * </span>
+    {%- endif -%}
+  </label>
+  <div class='controls'>
+    <div class='input-append date' data-date='{{ today }}'
+      data-date-format='{{format}}' id='{{fieldname ~ "-button"}}'>
+      {{ field(class=fieldclass,placeholder=format,**kwargs) }}
+      <span class='add-on'><i class='icon-calendar'></i></span>
+    </div>
+    {% if error %}
+    <span class="help-inline">
+      {{-form.errors.get(fieldname,None)|nonone|first-}}
+    </span>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %} 
+
+{% macro checkbox(form, fieldname,message='',class='', fieldclass='') -%}
+{%- if form.errors.get(fieldname,None) -%}
+{% set class='error' %}
+{% set error='error' %}
+{% endif %}
+
+<div class="control-group {{class ~" "~ error}}">
+{% set field=form.__getattribute__(fieldname) %}
+
+  <label class='control-label'>{{field.label.text}}</label>
+  {%- if field.flags.required -%}
+  <span class='warning'> * </span>
+  {%- endif -%}
+  <div class='controls'>
+    <label class='checkbox'>
+      {{ field(class=fieldclass,**kwargs) }}
+      {{ message }}
+    </label>
+    {% if error %}
+    <span class="help-inline">
+      {{-form.errors.get(fieldname,None)|nonone|first-}}
+    </span>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %} 
+
+{% macro navitem(endpoint,text, icon='') %}
+{% if icon %}
+  {% set icon='<i class="' ~ icon ~ '"></i>' %}
+{% endif %}
+{%- if request.endpoint.endswith(endpoint) %}
+<li class='active'><a href='#'>{{icon|safe}}{{text}}</a></li>
+{% else %}
+<li><a href='{{url_for(endpoint)}}'>{{icon|safe}}{{text}}</a></li>
+{%- endif %}
+{% endmacro %}
+
+{% macro dropdown(name, icon='') -%}
+{% if icon %}
+  {% set icon='<i class="' ~ icon ~ '"></i> ' %}
+{% endif %}
+<li class='dropdown'>
+  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+    {{icon|safe}}{{name}}<b class="caret"></b></a>
+  <ul class="dropdown-menu">
+    {{ caller() }}
+  </ul>
+</li>
+{%- endmacro -%}
+
+{% macro priority(priority) -%}
+{% if (not priority) or (priority == 0) %}
+<span class='badge'>None</span>
+{% elif priority == 1 %}
+<span class='badge badge-info'>Lowest</span>
+{% elif priority == 2 %}
+<span class='badge badge-info'>Low</span>
+{% elif priority == 3 %}
+<span class='badge badge-success'>Normal</span>
+{% elif priority == 4 %}
+<span class='badge badge-warning'>High</span>
+{% elif priority == 5 %}
+<span class='badge badge-error'>URGENT</span>
+{% endif %}
+{%- endmacro %}

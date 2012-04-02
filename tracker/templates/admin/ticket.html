@@ -1,0 +1,105 @@
+{% extends 'admin/create.html' %}
+{% from 'macros.html' import field,field_prepend,checkbox  %}
+  {% block container %}
+    <div class='row'>
+      <div class="span8">
+        {% set flash=get_flashed_messages()|first %}
+        {% if flash %}
+        <div class="row">
+          <div class="span7 alert alert-success" style='text-align:center'>
+            <span class="label label-success">Success</span>
+            {{ flash  }}
+          </div>
+        </div> 
+        {% endif %}
+
+        {{ super() }}  
+      </div>
+
+      <div class="span4">
+        <div class="row"><!-- Owner Row -->
+          <div class="span4">
+            <legend>Owner</legend>
+            <dl class='dl-horizontal'>
+              <dt>Name</dt> <dd>{{ticket.user.name}}</dd>
+              <dt>Email</dt> <dd>{{ticket.user.email}}</dd>
+            </dl>
+          </div>
+        </div><!-- Owner Row -->
+
+        <div class="row"><!-- Dates Row -->
+          <div class="span4">
+            <legend>Dates</legend>
+            <dl class='dl-horizontal'>
+              <dt>Created</dt> 
+              {% if ticket.created %}
+              <dd>{{ticket.created.strftime('%Y-%m-%d')}}</dd>
+              {% else %}
+              <dd>None</dd>
+              {% endif %}
+              <dt>Due</dt> 
+              {% if ticket.due %}
+              <dd>{{ticket.due.strftime('%Y-%m-%d')}}</dd>
+              {% else %}
+              <dd>None</dd>
+              {% endif %}
+            </dl>
+          </div>
+        </div><!-- Dates Row -->
+
+        <div class="tabbable">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#notes" data-toggle="tab">Notes</a></li>
+            <li><a href="#messages" data-toggle="tab">Messages</a></li>
+            <li><a href="#files" data-toggle="tab">Files</a></li>
+          </ul>
+          <div class='tab-content'>
+            <div class='tab-pane active' id='notes'>
+              {% for note in ticket.notes %}
+              <div class="row">
+                <div class="span8  well">
+                  <div class="page-header">
+                    {{ note.created }}
+                  </div>
+                  <p>{{ note.text }}</p>
+                </div>
+              </div>
+              {% endfor %}
+            </div><!-- TAB PANE 1 -->
+
+            <div class='tab-pane' id='messages'>
+              {% for message in ticket.messages %}
+              <div class="row">
+                <div class="span8  well">
+                  <div class="page-header">
+                    {{ message.created }}
+                  </div>
+                  <p>{{ message.text }}</p>
+                </div>
+              </div>
+              {% endfor %}
+            </div><!-- TAB PANE 2 -->
+
+            <div class='tab-pane' id='files'>
+              <div class="row">
+                <div class="span4  well">
+                  <table class='table table-striped'>
+                    <colgroup>
+                      <col class='span2'>
+                    </colgroup>
+                    <tbody>
+                      {% for file in ticket.files %}
+                      <tr>
+                        <td>{{ file.name }}</td>
+                      </tr>
+                      {%- endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div><!-- TAB PANE 3 -->
+          </div><!-- TAB CONTENT -->
+        </div><!-- TABBABLE -->
+      </div>
+    </div>
+  {% endblock container %}

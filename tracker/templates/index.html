@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+    {% block container %}
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <hgroup>
+        <h1>Welcome to CARA RT</h1>
+        <h2>The CARA Request Tracker</h2>
+        </hgroup>
+        <p>This system is used to create new requests to the CARA Administrative
+        office and streamline communications.</p>
+        <p><a href={{url_for('create')}} 
+            class="btn btn-primary btn-large pull-right"> Create a Request
+            &raquo;</a> </p>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        {% for cat in categories %}
+        <div class="span4">
+          <h2>{{cat.name}}</h2>
+          <p>{{ cat.description}}</p>
+          <p><a class="btn" href="{{url_for('create',cat=cat.id)}}">
+            Create this Request &raquo;</a></p>
+        </div>
+        {% endfor %}
+      </div>
+    {% endblock container %}

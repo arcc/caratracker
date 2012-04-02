@@ -1,0 +1,14 @@
+{% extends layout %}
+    {% block container %}
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4 offset4">
+            {% if heading -%}
+            <h2>Heading</h2>
+            {% endif %}
+            <p>{{ message }}</p>
+            <p>{{ request.endpoint }}</p>
+        </div>
+      </div>
+    {% endblock container %}

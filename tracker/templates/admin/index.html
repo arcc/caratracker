@@ -1,0 +1,37 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import field, priority %}
+  {% block container %}
+  
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span10 offset1">
+        <table class='table table-striped'>
+          <colgroup>
+            <col class='span2'> <col class='span2'> <col class='span2'>
+            <col class='span2'> <col class='span2'>
+          </colgroup>
+          <thead><tr>
+            <th>Subject</th> <th>Category</th> <th>Status</th> <th>Owner</th>
+            <th>Priority</th>
+          </tr></thead>
+          <tbody>
+            {% for ticket in tickets -%}
+            <tr>
+              <td><a href="{{url_for('admin.ticket',id=ticket.id)}}">
+                  {{ticket.title}}</a></td>
+              {%- if ticket.category -%}
+              <td><a href={{url_for('admin.category',id=ticket.category.id)}}>
+                  {{ticket.category.name}}</a></td>
+              {%- else -%}
+              <td>None</td>
+              {%- endif -%}
+              <td>{{ticket.status}}</td>
+              <td>{{ticket.owner}}</td>
+              <td>{{priority(ticket.priority)}}</td>
+            </tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endblock container %}

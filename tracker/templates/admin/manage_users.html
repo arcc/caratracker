@@ -1,0 +1,30 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import field %}
+  {% block container %}
+  
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <table class='table table-striped'>
+          <colgroup>
+            <col class='span2'> <col class='span2'> <col class='span2'>
+          </colgroup>
+          <thead><tr>
+            <th>User</th> <th>Email</th> <th> </th>
+          </tr></thead>
+          <tbody>
+            {% for user in users -%}
+            <tr>
+              <td><a href={{url_for('admin.user',id=user.id)}}>
+                  {{user.name}}</a></td>
+              <td>{{user.email}}</td>
+              <td><a href="{{url_for('approve_user',id=user.id)}}"
+                      class='btn btn-success'>
+                      <i class='icon-ok'></i> Approve</a></td>
+            </tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endblock container %}

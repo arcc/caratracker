@@ -1,0 +1,26 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import field %}
+  {% block container %}
+  
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <dl class='dl-horizontal'>
+          <dt>Name</dt>
+          <dd>{{user.name}}</dd>
+          <dt>Email</dt>
+          <dd>{{user.email}}</dd>
+        </dl>
+      </div>
+    </div>
+    {% for ticket in user.tickets.filter_by(active=True) %}
+    <div class="row">
+      <div class="span8 offset2 well">
+        <div class="page-header">
+          <a href="{{url_for('.ticket',id=ticket.id)}}">{{ ticket.title }}</a>
+        </div>
+        <p>{{ticket.description}}</p>
+      </div>
+    </div>
+    {% endfor %}
+  {% endblock container %}

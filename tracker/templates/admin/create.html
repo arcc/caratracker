@@ -1,0 +1,53 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import field,field_prepend,checkbox,date with context%}
+  {% block container %}
+
+    <!-- Example row of columns -->
+    <div class="row">
+      {% if not id %}
+      <div class="span8 offset2">
+      {% else %}
+      <div class="span8">
+      {% endif %}
+        <form method='POST' enctype="multipart/form-data" 
+          action='{{url_for(request.endpoint, id=id)}}' class='form-horizontal'>
+          {{ form.hidden_tag() }}
+          <fieldset>
+            {% if not id %}
+            <legend>New Request</legend>
+            {% endif %}
+            {{ field(form,'title') }}
+            {{ field(form, 'category') }}
+            {{ field(form, 'description', fieldclass='span3', rows='3') }}
+            {{ field(form, 'priority') }}
+            {{ field(form, 'account') }}
+            {{ date(form, 'due') }}
+            {{ field(form, 'status') }}
+            {{ checkbox(form, 'approved', 'If approved, please enter below.') }}
+            {{ field(form, 'approved_by') }}
+            {{ field_prepend(form, 'cost', '$' ) }}
+            
+            {{ field(form, 'file_upload') }}
+            <div class='form-actions'>
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button class="btn">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  {% endblock container %}
+
+  {% block script %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(function(){
+        var startDate = new Date({{ today.strftime('%Y-%m-%d')}});
+        $('#due-button').datepicker({ 
+          format:'yyyy-mm-dd', 
+          startDate: new Date({{ today.strftime('%Y-%m-%d')}})
+
+          }); 
+      });
+  </script>
+  {% endblock %}

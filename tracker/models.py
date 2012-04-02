@@ -1,0 +1,59 @@
+
+from flask.ext.sqlalchemy import SQLAlchemy
+
+from . import app
+
+db = SQLAlchemy(app)
+
+class Ticket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title=db.Column(db.String(150))
+    description=db.Column(db.Text())
+    created=db.Column(db.Date)
+    due=db.Column(db.Date)
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
+    category_id=db.Column(db.Integer, db.ForeignKey('category.id'))
+    description=db.Column(db.Text())
+    files = db.relationship("File",backref="ticket",lazy='dynamic')
+    account=db.Column(db.String(50))
+    approved=db.Column(db.Integer)
+    approved_by=db.Column(db.String(150))
+    notes = db.relationship("Note",backref="ticket",lazy='dynamic')
+    messages = db.relationship("Message",backref="ticket",lazy='dynamic')
+    comment = db.Column(db.Text())
+    status=db.Column(db.String(50))
+    recall = db.Column(db.String(150))
+    priority = db.Column(db.Integer)
+    completed = db.Column(db.Boolean, default=False)
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(150))
+    description=db.Column(db.Text())
+    frontpage=db.Column(db.Boolean)
+    tickets = db.relationship("Ticket",backref="category",lazy='dynamic')
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(150))
+    openid=db.Column(db.String(100))
+    approved=db.Column(db.Boolean)
+    tickets = db.relationship("Ticket",backref="user",lazy='dynamic')
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text=db.Column(db.Text())
+    created=db.Column(db.Date)
+    ticket_id=db.Column(db.Integer, db.ForeignKey('ticket.id'))
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text=db.Column(db.Text())
+    created=db.Column(db.Date)
+    ticket_id=db.Column(db.Integer, db.ForeignKey('ticket.id'))
+
+class File(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(150))
+    filename=db.Column(db.String(300))
+    ticket_id=db.Column(db.Integer, db.ForeignKey('ticket.id'))

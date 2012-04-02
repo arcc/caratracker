@@ -1,0 +1,8 @@
+flask>=0.8
+hg+https://bitbucket.org/ajford/flask-script
+Flask-WTF>=0.5.2
+wtforms>=0.6
+itsdangerous
+flask-mail
+SQLAlchemy
+Flask-Uploads

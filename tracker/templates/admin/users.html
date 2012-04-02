@@ -1,0 +1,27 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import field %}
+  {% block container %}
+  
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <table class='table table-striped'>
+          <colgroup>
+            <col class='span6'> <col class='span2'>
+          </colgroup>
+          <thead><tr>
+            <th>User</th> <th>Count</th>
+          </tr></thead>
+          <tbody>
+            {% for user in users -%}
+            <tr>
+              <td><a href={{url_for('admin.user',id=user.id)}}>
+                  {{user.name}}</a></td>
+              <td>{{user.tickets.filter_by(active=True).count()}}</td>
+            </tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endblock container %}

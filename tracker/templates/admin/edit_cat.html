@@ -1,0 +1,24 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import field, checkbox %}
+  {% block container %}
+
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <form method='POST' action='{{url_for('.manage_category', id=id)}}'
+          class='form-horizontal'>
+          {{ form.hidden_tag() }}
+          <fieldset>
+            <legend>Edit Category</legend>
+            {{ field(form,'name') }}
+            {{ field(form,'description') }}
+            {{ checkbox(form,'frontpage', 
+                'Places item and description on front page') }}
+            <div class='form-actions'>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  {% endblock container %}

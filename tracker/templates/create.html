@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import field %}
+  {% block container %}
+
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <form method='POST' enctype="multipart/form-data" 
+          action='{{url_for('create')}}' class='form-horizontal'>
+          {{ form.hidden_tag() }}
+          <fieldset>
+            <legend>New Request</legend>
+            {{ field(form,'title') }}
+            {{ field(form, 'category') }}
+            {{ field(form, 'description', fieldclass='span3', rows='5') }}
+            {{ field(form, 'account') }}
+            {{ field(form, 'file_upload') }}
+            <div class='form-actions'>
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button class="btn">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  {% endblock container %}
