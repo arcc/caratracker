@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import priority,field %}
+    {% block container %}
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span5"> <!--Col 1--> 
+          <div class="row"> <!--Row 1--> 
+            <div class="span5">
+              <div span="page-header">
+                <h1>{{ ticket.title }}
+                {% if ticket.created %}
+                <small>Created {{ ticket.created.strftime('%Y-%m-%d') }}</small>
+                {% endif %}
+                </h1>
+              </div><!-- Page-Header -->
+              <div><!--Table 1 containter-->
+                <table class='table'>
+                  <colgroup>
+                    <col class='span'> <col class='span2'> 
+                  </colgroup>
+                  <thead><tr>
+                    <th>Subject</th> <th>Category</th> 
+                  </tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Category</td>
+                      {%- if ticket.category -%}
+                      <td>{{ticket.category.name}}</td>
+                      {%- else -%}
+                      <td>None</td>
+                      {%- endif -%}
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>{{ticket.status}}</td>
+                    </tr>
+                    <tr>
+                      <td>Priority</td>
+                      <td>{{priority(ticket.priority)}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div> <!--Table 1 containter--> 
+            </div> <!--/Span4--> 
+          </div><!-- ROW 1 -->
+        </div> <!--/Col 1--> 
+
+        <div class="span7"> <!--Col 2--> 
+          <div class="page-header">
+            <h1>Messages</h1>
+          </div>
+          <div class="row">
+            <div class="span7 well">
+              <form action="{{ url_for(request.endpoint,referrer=referrer) }}" 
+                method="POST" class="form-inline">
+                {{ form.hidden_tag() }}
+                <fieldset>
+                  {{ field(form,'text',fieldclass='span7',rows=3) }}
+                  <div class="pull-right">
+                    <input type="submit" class="btn btn-primary" value='Submit'>
+                    <input type="reset" class="btn" value='Cancel'>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+          {% for message in ticket.messages|reverse %}
+          <div class="row">
+            <div class="span7 well">
+              <div class="badge pull-right">
+                {{ message.created }}
+              </div>
+              <p>{{ message.text }}</p>
+            </div>
+          </div>
+          {% else %}
+          <div class="row">
+            <div class="span7 well">
+              <h3>No Messages</h3>
+            </div>
+          </div>
+          {% endfor %}
+        </div> <!--/Col 2--> 
+      </div>
+    {% endblock container %}

@@ -1,8 +1,11 @@
 flask>=0.8
-hg+https://bitbucket.org/ajford/flask-script
+git+git@github.com:ajford/flask-script.git
 Flask-WTF>=0.5.2
 wtforms>=0.6
 itsdangerous
 flask-mail
+Flask-SQLAlchemy
 SQLAlchemy
 Flask-Uploads
+simplejson
+Flask-OpenID

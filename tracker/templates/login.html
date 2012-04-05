@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import field %}
+  {% block container %}
+
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <div class="page-header">
+          <h1>Login</h1>
+        </div>
+      </div>
+    </div>
+    {% if error %}
+    <div class="row">
+      <div class="span8 offset2">
+        <div class="alert alert-error">
+          <span class="label label-important">ERROR:</span>{{ error }}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="span8 offset2">
+        <p>Welcome to the CARA Request Tracker.</p>
+        <p>The RT uses OpenID to support user login. Don't worry, you probably
+        already have an OpenID and don't even know it. CARA-RT supports OpenID's
+        provided by Google, Yahoo and AOL. Please select one of the providers
+        below. 
+      </div>
+    </div>
+    <div class="row">
+      <div class="span8 offset2">
+        <table class="span8">
+          <tr><td>
+          <a href='{{url_for('login',method='google',
+            next=request.values.get('next'))}}' class="btn btn-large">
+            Log in with Google</a>
+          </td><td>
+          <a href='{{url_for('login',method='yahoo',
+            next=request.values.get('next'))}}' class="btn btn-large">
+            Log in with Yahoo</a>
+          </td><td>
+          <a href='{{url_for('login',method='aol',
+            next=request.values.get('next'))}}' class="btn btn-large">
+            Log in with AOL</a>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+    
+  {% endblock container %}

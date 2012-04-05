@@ -8,7 +8,6 @@
         <table class='table table-striped'>
           <colgroup>
             <col class='span2'> <col class='span2'> <col class='span2'> 
-            <col class='span2'>
           </colgroup>
           <thead><tr>
             <th>User</th> <th>Email</th> 
@@ -19,12 +18,9 @@
               <td><a href={{url_for('admin.user',id=user.id)}}>
                   {{user.name}}</a></td>
               <td>{{user.email}}</td>
-              <td><a href="{{url_for('.approve_user',id=user.id)}}"
+              <td><a href="{{url_for('.activate_user',id=user.id)}}"
                       class='btn btn-success'>
                       <i class='icon-ok'></i> Approve</a></td>
-              <td><a href="{{url_for('.deny_user',id=user.id)}}"
-                      class='btn btn-danger'>
-                      <i class='icon-remove'></i> Deny</a></td>
             </tr>
             {%- endfor %}
           </tbody>

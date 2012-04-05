@@ -8,6 +8,7 @@ from flaskext.script import Manager,Server,prompt_pass,prompt,prompt_bool,Shell
 from tracker import app
 import tracker.models as models
 import tracker.forms as forms
+import tracker.auth as auth
 #import tracker.admin.models as models
 
 manager = Manager(app)
@@ -15,7 +16,7 @@ manager.add_command("runserver", Server())
 
 def _make_context():
     return dict(app=app, models=models, forms=forms,
-            ctx=app.test_request_context())
+            ctx=app.test_request_context(), auth=auth)
 
 try:
     manager.add_command("shell", Shell(use_bpython=True,

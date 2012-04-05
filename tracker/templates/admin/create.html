@@ -7,7 +7,7 @@
       {% if not id %}
       <div class="span8 offset2">
       {% else %}
-      <div class="span8">
+      <div class="span4">
       {% endif %}
         <form method='POST' enctype="multipart/form-data" 
           action='{{url_for(request.endpoint, id=id)}}' class='form-horizontal'>

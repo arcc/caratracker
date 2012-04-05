@@ -1,27 +1,34 @@
 from datetime import date
 
 from flask import (Blueprint, render_template, abort, request, url_for,
-                    flash, redirect, make_response)
+                    flash, redirect, make_response, g)
 
 from . import app
 from . import models
 from . import forms
 from . import utils
+from .auth import admin_required
 
 admin = Blueprint('admin', __name__, template_folder='templates',
                 static_folder='static')
 
+from .manage import *
+
 @admin.route('/')
+@admin_required
 def index():
     tickets = models.Ticket.query.filter(models.Ticket.completed == False)
     tickets = tickets.order_by(models.Ticket.priority.desc()).all()
     return render_template('admin/index.html', tickets = tickets)
 
 @admin.route('/ticket/<int:id>', methods=['POST','GET'])
+@admin_required
 def ticket(id):
     today = date.today()
     ticket = models.Ticket.query.get_or_404(id)
     form = forms.Ticket(obj=ticket)
+    msg_form = forms.Message()
+    note_form = forms.Note()
     if form.validate_on_submit():
         form.populate_obj(ticket)
         models.db.session.commit()
@@ -37,16 +44,52 @@ def ticket(id):
         flash('Request #%s updated'%ticket.id)
     
     return render_template('admin/ticket.html', id = id, ticket=ticket,
-            form=form, today=today)
+            form=form,msg_form=msg_form, note_form=note_form, today=today)
+
+@admin.route('/note/<int:id>', methods=['POST'])
+@admin_required
+def note(id):
+    form = forms.Note()
+    if form.validate_on_submit():
+        note = models.Note()
+        form.populate_obj(note)
+        note.ticket_id = id
+        models.db.session.add(note)
+        models.db.session.commit()
+    return redirect(url_for('.ticket',id=id))
+
+@admin.route('/message/<int:id>', methods=['POST'])
+@admin_required
+def message(id):
+    form = forms.Message()
+    if form.validate_on_submit():
+        message = models.Message()
+        form.populate_obj(message)
+        message.ticket_id = id
+        models.db.session.add(message)
+        models.db.session.commit()
+    return redirect(url_for('.ticket',id=id))
+    
+@admin.route('/complete/<int:id>', methods=['POST'])
+@admin_required
+def complete(id):
+    ticket = models.Ticket.query.get(id)
+    if ticket is None:
+        abort(404)
+    ticket.completed = True
+    models.db.session.add(ticket)
+    models.db.session.commit()
+    return redirect(url_for('.index'))
 
 @admin.route('/create', methods=['POST','GET'])
+@admin_required
 def create():
     today = date.today()
     form = forms.Ticket()
     if form.validate_on_submit():
         ticket = models.Ticket()
         form.populate_obj(ticket)
-        ticket.created=date.today()
+        ticket.user_id = g.user.id
         models.db.session.add(ticket)
         models.db.session.commit()
         attachment = form.file_upload.data
@@ -64,6 +107,7 @@ def create():
     return render_template("admin/create.html",form=form, today=today)
 
 @admin.route('/category/<int:id>', methods=['POST','GET'])
+@admin_required
 def category(id):
     tickets = models.Ticket.query.filter(models.Ticket.completed == False)
     tickets = tickets.filter_by(category_id=id)
@@ -71,59 +115,34 @@ def category(id):
     return render_template('admin/index.html', tickets = tickets)
 
 @admin.route('/categories')
+@admin_required
 def categories():
     categories = models.Category.query.order_by('name').all()
     return render_template('admin/categories.html', categories = categories)
 
 @admin.route('/users')
+@admin_required
 def users():
     users = models.User.query.order_by('name').all()
     return render_template('admin/users.html', users = users)
 
 @admin.route('/user/<int:id>')
+@admin_required
 def user(id):
     user = models.User.query.get_or_404(id)
     return render_template('admin/user.html', user = user)
 
-@admin.route('/manage/categories', methods=['GET','POST'])
-def manage_categories():
-    categories = models.Category.query.all()
+@admin.route('/archives')
+@admin_required
+def archives():
+    tickets = models.Ticket.query.filter(models.Ticket.completed == True)
+    tickets = tickets.order_by(models.Ticket.priority.desc()).all()
+    return render_template('admin/index.html', tickets = tickets)
 
-    form = forms.Category()
-   
-    if form.validate_on_submit():
-        category = models.Category()
-        form.populate_obj(category)
-        models.db.session.add(category)
-        models.db.session.commit()
-        return redirect(url_for('.manage_categories'))
+@admin.route('/archives/categories')
+@admin_required
+def archives_categories():
+    categories = models.Category.query.order_by('name').all()
+    return render_template('admin/archive_categories.html', 
+            categories = categories)
 
-    return render_template('admin/manage_cats.html', form=form,
-            categories=categories)
-
-@admin.route('/manage/category/<int:id>', methods=['GET','POST'])
-def manage_category(id):
-    category = models.Category.query.get_or_404(id)
-    form = forms.Category(obj=category)
-
-    if form.validate_on_submit():
-        form.populate_obj(category)
-        models.db.session.commit()
-        flash("Category %s updated."%category.name)
-        return redirect(url_for('.manage_categories'))
-
-    return render_template('admin/edit_cat.html', form=form, id=id)
-
-@admin.route('/manage/users')
-def manage_users():
-    users = models.User.query.filter_by(approved=False).all()
-    return render_template('admin/manage_users.html')
-
-@admin.route('/manage/users/approve/<int:id>')
-def approve_user(id):
-    user = models.User.query.get_or_404(id)
-    user.approved=True
-    models.db.session.commit()
-    flash('User %s approved.'%user.name)
-
-    return redirect(url_for('manage_users'))

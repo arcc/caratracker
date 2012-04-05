@@ -3,6 +3,18 @@
   {% block container %}
   
     <!-- Example row of columns -->
+    <div class='row'>
+      <div class="span12 pull-right"><!--Completed Button-->
+          {% if user.suspended %}
+          <a href='{{url_for('.activate_user',id=user.id)}}' 
+            class='btn btn-success pull-right'>Activate</a>
+          {% else %}
+          <a href='{{url_for('.suspend_user',id=user.id)}}' 
+            class='btn btn-danger pull-right'>Suspend</a>
+          {% endif %}
+      </div>  <!--Completed Button--> 
+    </div>
+
     <div class="row">
       <div class="span8 offset2">
         <dl class='dl-horizontal'>
@@ -10,16 +22,52 @@
           <dd>{{user.name}}</dd>
           <dt>Email</dt>
           <dd>{{user.email}}</dd>
+          <dt>Student ID</dt>
+          <dd>{{user.student_id}}</dd>
         </dl>
       </div>
     </div>
-    {% for ticket in user.tickets.filter_by(active=True) %}
+
+    <div class="row">
+      <div class="span8 offset2">
+        <table class="span8">
+          <tr>
+            {% if user.admin %}
+            <td> <a href='{{url_for('.lower_user',id=user.id)}}' 
+                class="btn btn-danger">Remove Admin Privileges</a></td>
+            {% else %}
+            <td> <a href='{{url_for('.elevate_user',id=user.id)}}' 
+                class="btn btn-success">Elevate User to Admin</a></td>
+            {% endif %}
+          </tr>
+          {% if g.user.can_elevate and user.admin %}
+          <tr>
+            {% if user.can_elevate %}
+            <td> <a href='{{url_for('.damn_user',id=user.id)}}' 
+                class="btn btn-danger">Remove Elevation Privileges</a></td>
+            {% else %}
+            <td> <a href='{{url_for('.bless_user',id=user.id)}}' 
+                class="btn btn-success">Grant User Elevation Privileges</a></td>
+            {% endif %}
+          </tr>
+          {% endif %}
+        </table>
+      </div>
+    </div>
+
+    {% for ticket in user.tickets.filter_by(completed=True) %}
     <div class="row">
       <div class="span8 offset2 well">
         <div class="page-header">
           <a href="{{url_for('.ticket',id=ticket.id)}}">{{ ticket.title }}</a>
         </div>
         <p>{{ticket.description}}</p>
+      </div>
+    </div>
+    {% else %}
+    <div class="row">
+      <div class="span8 offset2 well" style="text-align:center">
+        <h3>No Tickets</h3>
       </div>
     </div>
     {% endfor %}

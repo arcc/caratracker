@@ -2,6 +2,10 @@
 <script type='text/javascript' src='{{url_for('static',filename=filename)}}'></script>
 {% endmacro %}
 
+{% macro stylesheet(filename) %}
+<link href='{{url_for('static',filename=filename)}}' rel='stylesheet'>
+{% endmacro %}
+
 {% macro field(form, fieldname,class='', fieldclass='') -%}
 
 {%- if form.errors.get(fieldname,None) -%}
@@ -142,7 +146,14 @@
 </div>
 {% endmacro %} 
 
-{% macro navitem(endpoint,text, icon='') %}
+{% macro navitem(endpoint='#',text, icon='') %}
+{% if icon %}
+  {% set icon='<i class="' ~ icon ~ '"></i>' %}
+{% endif %}
+<li><a href='{{endpoint}}'>{{icon|safe}}{{text}}</a></li>
+{% endmacro %}
+
+{% macro navlink(endpoint,text, icon='') %}
 {% if icon %}
   {% set icon='<i class="' ~ icon ~ '"></i>' %}
 {% endif %}

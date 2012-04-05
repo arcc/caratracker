@@ -40,13 +40,22 @@ class Ticket(Create):
         validators=[NumberRange(0,5)])
 
 class Note(Form):
-    text=TextAreaField('Note')
+    text=TextAreaField('New Note')
 
 class Message(Form):
-    text=TextAreaField('Note')
+    text=TextAreaField('New Message')
 
 class Category(Form):
     name=TextField('New Category')
     description=TextAreaField('Description')
     frontpage=BooleanField('On Homepage')
     submit = SubmitField('Add Category')
+
+class Login(Form):
+    openid=TextField('OpenID')
+
+class Profile(Form):
+    name=TextField('Full Name', validators=[Required()])
+    email=TextField('Email', validators=[Required(),Email()])
+    student_id=TextField('Student ID', validators=[Required()])
+

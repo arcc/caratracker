@@ -2,11 +2,22 @@
 {% from 'macros.html' import field,field_prepend,checkbox  %}
   {% block container %}
     <div class='row'>
-      <div class="span8">
+      <div class="span12 pull-right"><!--Completed Button-->
+        <form action="{{url_for('.complete',id=id)}}" method="POST">
+          {% if ticket.completed %}
+          <button disabled class='btn btn-success disabled pull-right'>Completed</button>
+          {% else %}
+          <button class='btn btn-success pull-right'>Completed</button>
+          {% endif %}
+        </form>
+      </div>  <!--Completed Button--> 
+    </div>
+    <div class='row'>
+      <div class="span5">
         {% set flash=get_flashed_messages()|first %}
         {% if flash %}
         <div class="row">
-          <div class="span7 alert alert-success" style='text-align:center'>
+          <div class="span3 alert alert-success" style='text-align:center'>
             <span class="label label-success">Success</span>
             {{ flash  }}
           </div>
@@ -16,9 +27,9 @@
         {{ super() }}  
       </div>
 
-      <div class="span4">
+      <div class="span5">
         <div class="row"><!-- Owner Row -->
-          <div class="span4">
+          <div class="span7">
             <legend>Owner</legend>
             <dl class='dl-horizontal'>
               <dt>Name</dt> <dd>{{ticket.user.name}}</dd>
@@ -28,7 +39,7 @@
         </div><!-- Owner Row -->
 
         <div class="row"><!-- Dates Row -->
-          <div class="span4">
+          <div class="span7">
             <legend>Dates</legend>
             <dl class='dl-horizontal'>
               <dt>Created</dt> 
@@ -53,12 +64,26 @@
             <li><a href="#messages" data-toggle="tab">Messages</a></li>
             <li><a href="#files" data-toggle="tab">Files</a></li>
           </ul>
-          <div class='tab-content'>
-            <div class='tab-pane active' id='notes'>
-              {% for note in ticket.notes %}
+          <div class='tab-content'> <!--TAB CONTENT--> 
+            <div class='tab-pane active' id='notes'> <!--TAB PANE 1--> 
+              <div class="span6 well">
+                <form action="{{url_for('.note',id=id)}}" 
+                  method="POST" class="form-inline">
+                  {{ note_form.hidden_tag() }}
+                  <fieldset>
+                    {{ field(note_form,'text',fieldclass='span6',rows=3) }}
+                    <div class="pull-right">
+                      <input type="submit" class="btn btn-primary"
+                        value='Submit'>
+                      <input type="reset" class="btn" value='Cancel'>
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+              {% for note in ticket.notes|reverse %}
               <div class="row">
-                <div class="span8  well">
-                  <div class="page-header">
+                <div class="span6  well">
+                  <div class="badge pull-right">
                     {{ note.created }}
                   </div>
                   <p>{{ note.text }}</p>
@@ -67,11 +92,25 @@
               {% endfor %}
             </div><!-- TAB PANE 1 -->
 
-            <div class='tab-pane' id='messages'>
+            <div class='tab-pane' id='messages'> <!--TAB PANE 2--> 
+              <div class="span6 well">
+                <form action="{{url_for('.message',id=id)}}" 
+                  method="POST" class="form-inline">
+                  {{ msg_form.hidden_tag() }}
+                  <fieldset>
+                    {{ field(msg_form,'text',fieldclass='span6',rows=3) }}
+                    <div class="pull-right">
+                      <input type="submit" class="btn btn-primary"
+                        value='Submit'>
+                      <input type="reset" class="btn" value='Cancel'>
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
               {% for message in ticket.messages %}
               <div class="row">
-                <div class="span8  well">
-                  <div class="page-header">
+                <div class="span6  well">
+                  <div class="badge pull-right">
                     {{ message.created }}
                   </div>
                   <p>{{ message.text }}</p>
@@ -80,9 +119,9 @@
               {% endfor %}
             </div><!-- TAB PANE 2 -->
 
-            <div class='tab-pane' id='files'>
+            <div class='tab-pane' id='files'> <!--TAB PANE 3--> 
               <div class="row">
-                <div class="span4  well">
+                <div class="span6  well">
                   <table class='table table-striped'>
                     <colgroup>
                       <col class='span2'>
@@ -91,6 +130,11 @@
                       {% for file in ticket.files %}
                       <tr>
                         <td>{{ file.name }}</td>
+                        {% if file.created %}
+                        <td>{{ file.created.strftime('%Y-%m-%d') }}</td>
+                        {% else %}
+                        <td>Unknown</td>
+                        {% endif %}
                       </tr>
                       {%- endfor %}
                     </tbody>

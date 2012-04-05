@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import field %}
+  {% block container %}
+
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span8 offset2">
+        <div class="page-header">
+          <h1>Create Profile</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="span8 offset2">
+        <p>Please enter the following information. We've tried to fill in as
+        much as possible using your OpenID.</p> 
+      </div>
+    </div>
+    <div class="row">
+      <div class="span8 offset2">
+        <form method='POST' action='{{url_for('create_profile')}}'
+          class='form-horizontal'>
+          {{ form.hidden_tag() }}
+          <fieldset>
+            {{ field(form,'name') }}
+            {{ field(form, 'email') }}
+            {{ field(form, 'student_id') }}
+            <div class='form-actions'>
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <a href='{{url_for('logout')}}' class="btn" >Cancel</a>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    
+  {% endblock container %}

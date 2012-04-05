@@ -1,4 +1,4 @@
-{%- from 'macros.html' import navitem with context-%}
+{%- from 'macros.html' import navlink,navitem, script,stylesheet with context-%}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,7 +15,7 @@
         padding-bottom: 40px;
       }
     </style>
-    <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    {{ stylesheet("bootstrap/css/bootstrap.css") }}
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -23,14 +23,15 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="static/bootstrap/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="static/bootstrap/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="static/bootstrap/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="static/bootstrap/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='ico/RT_Logo.ico') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_for('static',filename='ico/RT_Logo_114.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static',filename='ico/RT_Logo_72.png') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ url_for('static',filename='ico/RT_Logo_57.png') }}">
   </head>
 
   <body>
 
+    {% block navbar %}
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -42,13 +43,22 @@
           <a class="brand" href="#">CARA RT</a>
           <div class="nav-collapse">
             <ul class="nav">
-              {{ navitem('index','Home') }}    
-              {{ navitem('create','Create') }}
+              {{ navlink('index','Home') }}    
+              {{ navlink('create','Create') }}
+            </ul>
+            <ul class="nav pull-right">
+              {% if g.user %}
+              {{ navitem('#','Logged in as '~g.user.name) }}
+              {{ navlink('logout','Log Out') }}
+              {% else %}
+              {{ navlink('login','Log In') }}
+              {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
+    {% endblock navbar %} 
 
     <div class="container">
     {% block container %}
@@ -66,8 +76,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     {% block script %}
-    <script src="static/bootstrap/js/jquery-1.7.2.js"></script>
-    <script src="static/bootstrap/js/bootstrap.js"></script>
+    {{ script('bootstrap/js/jquery-1.7.2.js') }}
+    {{ script('bootstrap/js/bootstrap.js') }}
     {% endblock script %}
 
   </body>
