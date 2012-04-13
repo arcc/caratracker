@@ -14,7 +14,6 @@ class Ticket(db.Model):
     due=db.Column(db.Date)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id=db.Column(db.Integer, db.ForeignKey('category.id'))
-    description=db.Column(db.Text())
     files = db.relationship("File",backref="ticket",lazy='dynamic')
     account=db.Column(db.String(50))
     approved=db.Column(db.Boolean, default=False)
