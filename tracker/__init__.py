@@ -15,6 +15,7 @@ from . import forms
 from . import jinjaconfig
 from . import admin
 from . import utils
+from . import tasks
 
 from .auth import *
 
@@ -46,6 +47,7 @@ def create():
             f.ticket_id = ticket.id
             models.db.session.add(f)
             models.db.session.commit()
+        tasks.send_confirmation(ticket.id)
         return redirect(url_for('confirmation'))
     
     return render_template("create.html",form=form)
@@ -58,16 +60,16 @@ def confirmation():
 @app.route('/review/<referrer>', methods=['GET','POST'])
 @login_required
 def review(referrer):
-    bad_referrer = render_template('message.html', 
+    bad_referrer = render_template('message.html',layout="layout.html",
         heading="Invalid Request Referrer", 
         message="""Please check the link that you recieved. If you think you are
         recieving this error in error, please contact the CARA Office.""")
     try:
-        id = utils.serializer.dumps(referrer)
+        id = utils.serializer.loads(referrer)
     except utils.itsdangerous.BadSignature:
         return bad_referrer
 
-    ticket = models.Ticket.get(id)
+    ticket = models.Ticket.query.get(id)
 
     if g.user.id is not ticket.user_id:
         session['denied']= "You are not the owner of this request"
@@ -84,14 +86,12 @@ def review(referrer):
         message.ticket_id = id
         models.db.session.add(message)
         models.db.session.commit()
+        tasks.send_message(message.id)
 
     return render_template('ticket.html',ticket=ticket, referrer=referrer,
             form=form)
 
 
-
-
-    return render_template('ticket.html',ticket=ticket, referrer=referrer,
-            form=form)
+    
     
 app.register_blueprint(admin.admin, url_prefix='/admin')

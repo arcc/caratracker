@@ -1,0 +1,16 @@
+<table width='100%' cellpadding="30px">
+    <tr>
+        <td>
+            <table width='600px' bgcolor="#FFFFFF" cellpadding="15px" style="margin: auto;">
+                <tr style="text-align:center">
+                    <td><a href="{{url_for('index',_external=True)}}">
+                      <h2>CARA Request Tracker</h2></a></td>
+                </tr>
+                {% block content %}
+                {% endblock content %}
+                <tr><td>Thank you for using the CARA Request Tracker</td></tr> 
+            </table>
+        </td>
+    </tr>
+</table>
+

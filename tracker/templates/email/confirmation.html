@@ -1,0 +1,29 @@
+{% extends "email/base.html" %}
+
+{% block content %}
+<tr><td><p>Thank you for submitting your request. We will process your request
+        as soon as possible. Below is a copy of the information you submitted.
+        If any of this information is incorrect, please notify us as soon as
+        possible.</p></td></tr>
+<tr><td><p>Your request can also be reviewed online 
+    <a href="{{url_for("review",referrer=referrer,_external=True)}}">
+        {{url_for("review",referrer=referrer,_external=True)}}</a></p></td></tr>
+<tr><td>
+        <table id='Info'>
+        <tr><td align='left'>Subject:</td>
+            <td align='left'>{{ticket.title}}</td></tr>
+        <tr><td align='left'>Category:</td>
+            <td align='left'>{{ticket.category.name}}</td></tr>
+        <tr><td align='left'>Description:</td>
+            <td align='left'>{{ticket.description}}</td></tr>
+        <tr><td align='left'>Account:</td>
+            <td align='left'>{{ticket.account}}</td></tr>
+        {% if ticket.files %}
+        <tr><td align='left'>Files:</td><td><ul>
+        {% for file in ticket.files.all() %}
+            <li>{{ticket.name}}</li>
+        {% endfor %}</ul></td></tr>
+        {% endif %}
+        </table>
+</td></tr>
+{% endblock %}
