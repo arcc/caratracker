@@ -12,7 +12,7 @@ from . import utils
 mail = Mail(app)
 
 def send_message(id):
-    message = models.Message.get(id)
+    message = models.Message.query.get(id)
     email = Message("[CARA-RT] Request #%s"%message.ticket_id)
     email.html = render_template('email/message.html', message=message,
                              referrer=utils.serializer.dumps(message.ticket.id))
@@ -23,7 +23,7 @@ def send_message(id):
         app.logger.warning("SMTP Error\n%s"%error)
 
 def send_confirmation(id):
-    ticket = models.Ticket.get(id)
+    ticket = models.Ticket.query.get(id)
     email = Message("[CARA-RT] Request #%s"%ticket.id)
     email.html = render_template('email/confirmation.html', message=message,
                              referrer=utils.serializer.dumps(message.ticket.id))
