@@ -54,6 +54,7 @@ def note(id):
         note = models.Note()
         form.populate_obj(note)
         note.ticket_id = id
+        note.user_id = g.user.id
         models.db.session.add(note)
         models.db.session.commit()
     return redirect(url_for('.ticket',id=id))
@@ -66,6 +67,7 @@ def message(id):
         message = models.Message()
         form.populate_obj(message)
         message.ticket_id = id
+        message.user_id = g.user.id
         models.db.session.add(message)
         models.db.session.commit()
     return redirect(url_for('.ticket',id=id))

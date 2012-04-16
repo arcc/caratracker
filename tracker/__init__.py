@@ -85,6 +85,7 @@ def review(referrer):
         message = models.Message()
         form.populate_obj(message)
         message.ticket_id = id
+        message.user_id = g.user.id
         models.db.session.add(message)
         models.db.session.commit()
         tasks.send_message(message.id)

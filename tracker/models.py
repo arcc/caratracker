@@ -47,12 +47,15 @@ class User(db.Model):
     can_elevate=db.Column(db.Boolean, default=False)
     suspended=db.Column(db.Boolean, default=False)
     tickets = db.relationship("Ticket",backref="user",lazy='dynamic')
+    messages = db.relationship("Message",backref="user",lazy='dynamic')
+    notes = db.relationship("Notes",backref="user",lazy='dynamic')
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text=db.Column(db.Text())
     created=db.Column(db.Date)
     ticket_id=db.Column(db.Integer, db.ForeignKey('ticket.id'))
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self):
         self.created = date.today()
@@ -62,6 +65,7 @@ class Message(db.Model):
     text=db.Column(db.Text())
     created=db.Column(db.Date)
     ticket_id=db.Column(db.Integer, db.ForeignKey('ticket.id'))
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self):
         self.created = date.today()

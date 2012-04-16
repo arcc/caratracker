@@ -87,6 +87,7 @@
                     {{ note.created }}
                   </div>
                   <p>{{ note.text }}</p>
+                  <p class="pull-right"> -- {{ note.user.name }}</p>
                 </div>
               </div>
               {% endfor %}
@@ -114,6 +115,7 @@
                     {{ message.created }}
                   </div>
                   <p>{{ message.text }}</p>
+                  <p class="pull-right"> -- {{ message.user.name }}</p>
                 </div>
               </div>
               {% endfor %}
