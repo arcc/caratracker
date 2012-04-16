@@ -3,6 +3,7 @@ from re import compile as re_compile
 from werkzeug import ImmutableDict
 
 from . import app
+from . import utils
 
 jinja_options = dict(app.jinja_options)
 jinja_options.update({'trim_blocks':True})
@@ -25,8 +26,11 @@ def nonone(x):
     else:
         return x
 
+referrer = lambda x: utils.serializer.dumps(x)
+
 app.jinja_env.filters['phone']=prettyPhone
 app.jinja_env.filters['currency']=currency
 app.jinja_env.filters['nonone']=nonone
+app.jinja_env.filters['referrer']=referrer
 app.jinja_env.add_extension('jinja2.ext.do')
 

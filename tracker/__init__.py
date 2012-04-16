@@ -91,7 +91,17 @@ def review(referrer):
     return render_template('ticket.html',ticket=ticket, referrer=referrer,
             form=form)
 
-
+@app.route('/user', methods=['GET','POST'])
+@login_required
+def user():
+    user = g.user
+    form = forms.Profile(obj=user)
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        models.db.commit()
+        flash("Successfully Updated")
+        return redirect(url_for(user))
+    return render_template('user.html',user=user,form=form)
     
     
 app.register_blueprint(admin.admin, url_prefix='/admin')

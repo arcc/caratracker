@@ -48,7 +48,7 @@
             </ul>
             <ul class="nav pull-right">
               {% if g.user %}
-              {{ navitem('#','Logged in as '~g.user.name) }}
+              {{ navlink('user','Logged in as '~g.user.name) }}
               {{ navlink('logout','Log Out') }}
               {% else %}
               {{ navlink('login','Log In') }}

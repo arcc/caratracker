@@ -18,7 +18,7 @@
     </div>
     <div class="row">
       <div class="span8 offset2">
-        <form method='POST' action='{{url_for('create_profile')}}'
+        <form method='POST' action='{{url_for(request.endpoint)}}'
           class='form-horizontal'>
           {{ form.hidden_tag() }}
           <fieldset>
