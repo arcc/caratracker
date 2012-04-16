@@ -8,7 +8,7 @@ if not app.debug:
 
     from flask.ext.mail import email_dispatched
 
-    file_handler = FileHandler(path.join(app.instance_path,"tracker.log")
+    file_handler = FileHandler(path.join(app.instance_path,"tracker.log"))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(Formatter("""
         %(asctime)s %(levelname)s: %(message)s
