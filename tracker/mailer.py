@@ -5,6 +5,8 @@ It's based heavily off of Flask-Mail (originaly by danjac),
 and owes a majority of its code to him.
 
 """
+from flask import _request_ctx_stack
+
 from email.mime.text import MIMEText
 from subprocess import PIPE,STDOUT,Popen
 
