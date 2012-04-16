@@ -48,7 +48,7 @@ class User(db.Model):
     suspended=db.Column(db.Boolean, default=False)
     tickets = db.relationship("Ticket",backref="user",lazy='dynamic')
     messages = db.relationship("Message",backref="user",lazy='dynamic')
-    notes = db.relationship("Notes",backref="user",lazy='dynamic')
+    notes = db.relationship("Note",backref="user",lazy='dynamic')
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)

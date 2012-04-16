@@ -72,7 +72,7 @@ def review(referrer):
 
     ticket = models.Ticket.query.get(id)
 
-    if g.user.id is not ticket.user_id:
+    if g.user.id != ticket.user_id:
         session['denied']= "You are not the owner of this request"
         return redirect(url_for('permission_denied'))
 
