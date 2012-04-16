@@ -9,13 +9,15 @@ from tracker import app
 import tracker.models as models
 import tracker.forms as forms
 import tracker.auth as auth
+import tracker.tasks as tasks
+import tracker.utils as utils
 #import tracker.admin.models as models
 
 manager = Manager(app)
 manager.add_command("runserver", Server())
 
 def _make_context():
-    return dict(app=app, models=models, forms=forms,
+    return dict(app=app, models=models, forms=forms, utils=utils, tasks=tasks,
             ctx=app.test_request_context(), auth=auth)
 
 try:
