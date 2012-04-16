@@ -16,6 +16,7 @@ from . import jinjaconfig
 from . import admin
 from . import utils
 from . import tasks
+from .log import *
 
 from .auth import *
 
