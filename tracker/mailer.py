@@ -127,9 +127,9 @@ class Message(object):
     def dump(self):
         assert self.html or self.body
         if self.html:
-            msg = MIMEText(html,'html')
+            msg = MIMEText(self.html,'html')
         elif self.body:
-            msg = MIMEText(body)
+            msg = MIMEText(self.body)
         
         msg['Subject'] = self.subject
         msg['To'] = ', '.join(self.recipients) 
