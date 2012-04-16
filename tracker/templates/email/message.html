@@ -14,11 +14,11 @@
             </td></tr>
         </table></td></tr>
 <tr><td><p>{{message.text}}</p></td></tr>
-<tr><td><p>From: {{message.owner.name}}</p></td></tr>
+<tr><td><p>From: {{message.user.name}}</p></td></tr>
 <tr><td><p>Sent On {{message.created.strftime("%Y-%m-%d")}}</p></td></tr>
 <tr><td></td></tr>
 <tr><td><p>You can reply online at 
-    <a href="{{url_for("review",referrer=ticket.id|referrer,_external=True)}}">
-        {{url_for("review",referrer=ticket.id|referrer,_external=True)}}
+    <a href="{{url_for("review",referrer=message.ticket.id|referrer,_external=True)}}">
+        {{url_for("review",referrer=message.ticket.id|referrer,_external=True)}}
     </a></p></td></tr>
 {% endblock %}
