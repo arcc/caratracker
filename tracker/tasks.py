@@ -2,14 +2,16 @@ from smtplib import SMTPException
 
 from flask import (Blueprint, render_template, abort, request, url_for,
                     flash, redirect, make_response)
-from flask.ext.mail import Mail, Message
+#from flask.ext.mail import Mail, Message
 from itsdangerous import URLSafeSerializer
 
 from . import app
 from . import models
 from . import utils
+from .mailer import Mailer, Message
 
-mail = Mail(app)
+#mail = Mail(app)
+mail = Mailer(app)
 
 def send_message(id):
     message = models.Message.query.get(id)
