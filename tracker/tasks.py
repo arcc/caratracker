@@ -14,8 +14,7 @@ mail = Mail(app)
 def send_message(id):
     message = models.Message.query.get(id)
     email = Message("[CARA-RT] Request #%s"%message.ticket_id)
-    email.html = render_template('email/message.html', message=message,
-                             referrer=utils.serializer.dumps(message.ticket.id))
+    email.html = render_template('email/message.html', message=message)
     email.add_recipient(message.ticket.user.email)
     try:
         mail.send(email)
@@ -25,9 +24,9 @@ def send_message(id):
 def send_confirmation(id):
     ticket = models.Ticket.query.get(id)
     email = Message("[CARA-RT] Request #%s"%ticket.id)
-    email.html = render_template('email/confirmation.html', message=message,
-                             referrer=utils.serializer.dumps(message.ticket.id))
-    email.add_recipient(message.ticket.user.email)
+    email.html = render_template('email/confirmation.html', ticket=ticket)
+    
+    email.add_recipient(ticket.user.email)
     try:
         mail.send(email)
     except SMTPException as error:

@@ -6,8 +6,9 @@
         If any of this information is incorrect, please notify us as soon as
         possible.</p></td></tr>
 <tr><td><p>Your request can also be reviewed online 
-    <a href="{{url_for("review",referrer=referrer,_external=True)}}">
-        {{url_for("review",referrer=referrer,_external=True)}}</a></p></td></tr>
+    <a href="{{url_for("review",referrer=ticket.id|referrer,_external=True)}}">
+        {{url_for("review",referrer=ticket.id|referrer,_external=True)}}
+    </a></p></td></tr>
 <tr><td>
         <table id='Info'>
         <tr><td align='left'>Subject:</td>
