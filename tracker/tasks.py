@@ -33,4 +33,15 @@ def send_confirmation(id):
         mail.send(email)
     except SMTPException as error:
         app.logger.warning("SMTP Error\n%s"%error)
+
+def send_registration(id):
+    user = models.User.query.get(id)
+    email = Message("[CARA-RT] New User")
+    email.html = render_template('email/register.html', user=user)
+    
+    admins = models.User.query.filter_by(admin=True).all()
+    email.add_recipient([ x.email for x in admins ])
+
+    mail.send(email)
+
     

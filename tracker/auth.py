@@ -57,6 +57,7 @@ def create_profile():
         models.db.session.add(user)
         models.db.session.commit()
         g.user = user
+        tasks.send_registration(user.id)
         return redirect(url_for('index'))
     return render_template('profile.html', form=form)
 
