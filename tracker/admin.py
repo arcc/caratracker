@@ -1,5 +1,7 @@
+from hashlib import md5
 from datetime import date
 
+from werkzeug import secure_filename
 from flask import (Blueprint, render_template, abort, request, url_for,
                     flash, redirect, make_response, g)
 
@@ -81,6 +83,14 @@ def complete(id):
     ticket.completed = True
     models.db.session.add(ticket)
     models.db.session.commit()
+    return redirect(url_for('.index'))
+
+@admin.route('/delete/<int:id>', methods=['POST'])
+@admin_required
+def delete(id):
+    ticket = models.Ticket.query.get_or_404(id)
+    utils.delete_ticket_cascade(ticket)
+    flash('Request has been deleted')
     return redirect(url_for('.index'))
 
 @admin.route('/create', methods=['POST','GET'])

@@ -1,3 +1,5 @@
+from os import path, unlink
+
 from flask import (render_template, abort, request, url_for,
                     flash, redirect, make_response)
 
@@ -66,10 +68,7 @@ def approve_user(id):
 def deny_user(id):
     user = models.User.query.get_or_404(id)
     for ticket in user.tickets:
-        for message in ticket.messages:
-            models.db.session.delete(message)
-        models.db.session.commit()
-        models.db.session.delete(ticket)
+        utils.delete_ticket_cascade(ticket)
     models.db.session.delete(user)
     models.db.session.commit()
     flash('User %s was denied.'%user.name)

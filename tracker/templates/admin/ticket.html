@@ -1,8 +1,36 @@
 {% extends 'admin/create.html' %}
 {% from 'macros.html' import field,field_prepend,checkbox  %}
   {% block container %}
+    <div class="modal hide" id="deleteModal">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Warning!</h3>
+      </div>
+      <div class="modal-body">
+        <p>This action cannot be undone. Are you sure you want to delete this
+          ticket?</p>
+      </div>
+      <div class="modal-footer">
+        <div class="pull-left">
+          <button class="btn" data-dismiss="modal">Cancel</button>
+        </div>
+        <div class="pull-right">
+          <form action="{{url_for('.delete',id=id)}}" method="POST">
+            <button class='btn btn-danger'>Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
     <div class='row'>
-      <div class="span12 pull-right"><!--Completed Button-->
+      <div class="span6 pull-left"><!--Delete Button-->
+        {% if not ticket.completed %}
+        <a class="btn btn-danger" data-toggle="modal" href="#deleteModal">
+          Delete</a>
+        {% else %}
+        <a class="btn disabled btn-danger" href="#">Delete</a>
+        {% endif %}
+      </div>  <!--/Delete Button--> 
+      <div class="span6 pull-right"><!--Completed Button-->
         <form action="{{url_for('.complete',id=id)}}" method="POST">
           {% if ticket.completed %}
           <button disabled class='btn btn-success disabled pull-right'>Completed</button>
@@ -10,7 +38,7 @@
           <button class='btn btn-success pull-right'>Completed</button>
           {% endif %}
         </form>
-      </div>  <!--Completed Button--> 
+      </div>  <!--/Completed Button--> 
     </div>
     <div class='row'>
       <div class="span5">
@@ -129,14 +157,18 @@
                       <col class='span2'>
                     </colgroup>
                     <tbody>
-                      {% for file in ticket.files %}
+                      {% for f in ticket.files %}
                       <tr>
-                        <td>{{ file.name }}</td>
-                        {% if file.created %}
-                        <td>{{ file.created.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ f.name }}</td>
+                        {% if f.created %}
+                        <td>{{ f.created.strftime('%Y-%m-%d') }}</td>
                         {% else %}
                         <td>Unknown</td>
                         {% endif %}
+                      </tr>
+                      {% else %}
+                      <tr>
+                        <td> No Files </td>
                       </tr>
                       {%- endfor %}
                     </tbody>
