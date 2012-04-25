@@ -17,7 +17,7 @@
             <tr>
               <td><a href={{url_for('admin.user',id=user.id)}}>
                   {{user.name}}</a></td>
-              <td>{{user.tickets.filter_by(completed=True).count()}}</td>
+              <td>{{user.tickets.filter_by(completed=False).count()}}</td>
             </tr>
             {%- endfor %}
           </tbody>

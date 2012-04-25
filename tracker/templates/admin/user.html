@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="padding-bottom:20px">
       <div class="span8 offset2">
         <table class="span8">
           <tr>
@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    {% for ticket in user.tickets.filter_by(completed=True) %}
+    {% for ticket in user.tickets.filter_by(completed=False) %}
     <div class="row">
       <div class="span8 offset2 well">
         <div class="page-header">
