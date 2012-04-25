@@ -101,7 +101,7 @@ def user():
     form = forms.Profile(obj=user)
     if form.validate_on_submit():
         form.populate_obj(user)
-        models.db.commit()
+        models.db.session.commit()
         flash("Successfully Updated")
         return redirect(url_for(user))
     return render_template('user.html',user=user,form=form)

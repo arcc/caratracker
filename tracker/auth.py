@@ -8,6 +8,7 @@ from flask.ext.openid import OpenID, COMMON_PROVIDERS
 from . import app
 from . import models
 from . import forms
+from . import tasks
 
 oid = OpenID(app, path.join(app.instance_path,'openid_store'))
 
