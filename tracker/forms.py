@@ -35,6 +35,7 @@ class Ticket(Create):
     approved=BooleanField('Approved')
     approved_by=TextField('Approved By')
     cost=TextField('Cost')
+    comment=TextAreaField('Comment', validators=[Length(3),Optional()])
     priority=SelectField('Priority', choices=[(0,'None'), (1,'Lowest'),
         (2,'Low'), (3,'Normal'), (4, 'High'), (5,'URGENT')], coerce=int,
         validators=[NumberRange(0,5)])
