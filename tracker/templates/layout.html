@@ -64,6 +64,15 @@
     {% endblock navbar %} 
 
     <div class="container">
+    {% set flash=get_flashed_messages()|first %}
+    {% if flash %}
+    <div class="row">
+      <div class="span8 offset2 alert alert-success" style='text-align:center'>
+        <span class="label label-success">Success</span>
+        {{ flash  }}
+      </div>
+    </div> 
+    {% endif %}
     {% block container %}
     {% endblock container %}
       <hr>

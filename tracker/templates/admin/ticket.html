@@ -42,16 +42,6 @@
     </div>
     <div class='row'>
       <div class="span5">
-        {% set flash=get_flashed_messages()|first %}
-        {% if flash %}
-        <div class="row">
-          <div class="span3 alert alert-success" style='text-align:center'>
-            <span class="label label-success">Success</span>
-            {{ flash  }}
-          </div>
-        </div> 
-        {% endif %}
-
         {{ super() }}  
       </div>
 

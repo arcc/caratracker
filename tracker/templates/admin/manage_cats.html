@@ -3,16 +3,6 @@
   {% block container %}
 
     <!-- Example row of columns -->
-    {% set flash=get_flashed_messages()|first %}
-    {% if flash %}
-    <div class="row">
-      <div class="span8 offset2 alert alert-success" style='text-align:center'>
-        <span class="label label-success">Success</span>
-        {{ flash  }}
-      </div>
-    </div> 
-    {% endif %}
-    
     <div class="row">
       <div class="span8 offset2">
         <form method='POST' action='{{url_for('.manage_categories')}}'
