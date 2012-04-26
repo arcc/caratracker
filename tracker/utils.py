@@ -6,6 +6,7 @@ from itsdangerous import URLSafeSerializer
 
 from . import app
 from . import models
+from . import forms
 
 serializer = URLSafeSerializer(app.config['SIGNING_KEY'])
 
