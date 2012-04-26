@@ -1,5 +1,3 @@
-from os import path, unlink
-
 from flask import (render_template, abort, request, url_for,
                     flash, redirect, make_response)
 
@@ -60,6 +58,7 @@ def approve_user(id):
     user.approved=True
     models.db.session.commit()
     flash('User %s approved.'%user.name)
+    tasks.send_approved(id)
 
     return redirect(url_for('.manage_users'))
 

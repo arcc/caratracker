@@ -44,4 +44,12 @@ def send_registration(id):
 
     mail.send(email)
 
+def send_approved(id):
+    user = models.User.query.get(id)
+    email = Message("[CARA-RT] You have been approved")
+    email.html = render_template('email/approved.html', user=user)
+    
+    email.add_recipient(user.email)
+
+    mail.send(email)
     
