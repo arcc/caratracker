@@ -5,6 +5,7 @@ from .admin import admin
 from . import models
 from . import forms
 from . import utils
+from . import tasks
 from .auth import login_required,admin_required,elevation_required
 
 @admin.route('/manage/categories', methods=['GET','POST'])
