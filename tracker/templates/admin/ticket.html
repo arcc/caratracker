@@ -149,11 +149,13 @@
                     <tbody>
                       {% for f in ticket.files %}
                       <tr>
-                        <td>{{ f.name }}</td>
+                        <td>
+                          <a href='{{url_for('uploaded',id=f.id)}}'>
+                            {{ f.name|noblank }}</a></td>
                         {% if f.created %}
                         <td>{{ f.created.strftime('%Y-%m-%d') }}</td>
                         {% else %}
-                        <td>Unknown</td>
+                        <td>Unknown Creation Date</td>
                         {% endif %}
                       </tr>
                       {% else %}

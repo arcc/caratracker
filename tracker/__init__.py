@@ -2,7 +2,8 @@ from hashlib import md5
 
 from werkzeug import secure_filename
 from flask import (Flask, make_response,redirect, url_for,
-                    render_template,json,request,flash,session)
+                    render_template,json,request,flash,session,
+                    send_from_directory,)
 from flask.ext.openid import OpenID
 
 app = Flask(__name__, static_url_path='/static', instance_relative_config=True)
@@ -105,6 +106,12 @@ def user():
         flash("Successfully Updated")
         return redirect(url_for(user))
     return render_template('user.html',user=user,form=form)
-    
+
+@app.route('/uploaded/<int:id>', methods=['GET','POST'])
+@login_required
+def uploaded(id):
+    f = models.File.query.get_or_404(id)
+    return send_from_directory(forms.upload_dir(app), f.filename,
+                               as_attachment=True, attachment_filename=f.name)
     
 app.register_blueprint(admin.admin, url_prefix='/admin')

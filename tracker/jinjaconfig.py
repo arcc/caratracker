@@ -20,17 +20,16 @@ def currency(x):
     except TypeError:
         return x
 
-def nonone(x):
-    if x is None:
-        return ''
-    else:
-        return x
+nonone = lambda x: '' if x is None else x
+
+noblank = lambda x: 'Unknown' if x is '' else x
 
 referrer = lambda x: utils.serializer.dumps(x)
 
 app.jinja_env.filters['phone']=prettyPhone
 app.jinja_env.filters['currency']=currency
 app.jinja_env.filters['nonone']=nonone
+app.jinja_env.filters['noblank']=noblank
 app.jinja_env.filters['referrer']=referrer
 app.jinja_env.add_extension('jinja2.ext.do')
 
