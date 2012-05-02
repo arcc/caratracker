@@ -22,7 +22,7 @@
               {% endcall %}
             </ul>
             <ul class="nav pull-right">
-              {{ navitem('#','Logged in as '~g.user.name) }}
+              {{ navlink('user','Logged in as '~g.user.name) }}
               {{ navlink('logout','Log Out',) }}
             </ul>
             <ul class="nav pull-right">
