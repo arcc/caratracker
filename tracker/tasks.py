@@ -40,7 +40,7 @@ def send_registration(id):
     email.html = render_template('email/register.html', user=user)
     
     admins = models.User.query.filter_by(admin=True).all()
-    email.add_recipient([ x.email for x in admins ])
+    email.recipients = [ x.email for x in admins ]
 
     mail.send(email)
 
