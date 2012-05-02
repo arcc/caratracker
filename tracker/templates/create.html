@@ -6,7 +6,7 @@
     <div class="row">
       <div class="span8 offset2">
         <form method='POST' enctype="multipart/form-data" 
-          action='{{url_for('create')}}' class='form-horizontal'>
+          action='{{url_for('create', cat=catid)}}' class='form-horizontal'>
           {{ form.hidden_tag() }}
           <fieldset>
             <legend>New Request</legend>

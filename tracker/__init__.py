@@ -52,7 +52,7 @@ def create():
         tasks.send_confirmation(ticket.id)
         return redirect(url_for('confirmation'))
     
-    return render_template("create.html",form=form)
+    return render_template("create.html",form=form, catid=cat.id)
 
 @app.route('/confirmation',methods=['GET'])
 @login_required
