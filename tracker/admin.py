@@ -1,7 +1,5 @@
-from hashlib import md5
 from datetime import date
 
-from werkzeug import secure_filename
 from flask import (Blueprint, render_template, abort, request, url_for,
                     flash, redirect, make_response, g)
 
@@ -106,13 +104,7 @@ def create():
         models.db.session.commit()
         attachment = form.file_upload.data
         if attachment:
-            f = models.File()
-            f.name = secure_filename(attachment.filename)
-            f.filename = md5(attachment.stream.getvalue()).hexdigest()
-            forms.allowed.save(attachment,name=f.filename)
-            f.ticket_id = ticket.id
-            models.db.session.add(f)
-            models.db.session.commit()
+            utils.new_file(attachment, ticket.id)
         flash('Request #%s created'%ticket.id)
         return redirect(url_for('.ticket',id=ticket.id))
 

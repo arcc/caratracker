@@ -42,13 +42,7 @@ def create():
         models.db.session.commit()
         attachment = form.file_upload.data
         if attachment:
-            f = models.File()
-            f.name = secure_filename(attachment.filename)
-            f.filename = md5(attachment.stream.getvalue()).hexdigest()
-            forms.allowed.save(attachment,name=f.filename)
-            f.ticket_id = ticket.id
-            models.db.session.add(f)
-            models.db.session.commit()
+            utils.new_file(attachment, ticket.id)
         tasks.send_confirmation(ticket.id)
         return redirect(url_for('confirmation'))
     

@@ -1,5 +1,7 @@
+from hashlib import md5
 from os import path, unlink
 
+from werkzeug import secure_filename
 from flask import (make_response,redirect, url_for,
                     render_template,json,request,flash,session)
 from itsdangerous import URLSafeSerializer
@@ -25,6 +27,16 @@ def delete_ticket_cascade(ticket):
         models.db.session.delete(f)
     models.db.session.commit()
     models.db.session.delete(ticket)
+    models.db.session.commit()
+
+def new_file(attachment, id):
+    f = models.File()
+    f.name = secure_filename(attachment.filename)
+    #f.filename = md5(attachment.stream.getvalue()).hexdigest()
+    f.filename = md5(str(attachment.filename)+str(id)).hexdigest()
+    forms.allowed.save(attachment,name=f.filename)
+    f.ticket_id = id
+    models.db.session.add(f)
     models.db.session.commit()
 
 
