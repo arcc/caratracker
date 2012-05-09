@@ -83,7 +83,7 @@ def review(referrer):
         message.user_id = g.user.id
         models.db.session.add(message)
         models.db.session.commit()
-        tasks.send_message(message.id)
+        tasks.send_reply(message.id)
         return redirect(url_for('review',referrer=referrer))
 
     return render_template('ticket.html',ticket=ticket, referrer=referrer,

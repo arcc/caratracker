@@ -7,6 +7,7 @@ from . import app
 from . import models
 from . import forms
 from . import utils
+from . import tasks
 from .auth import admin_required
 
 admin = Blueprint('admin', __name__, template_folder='templates',
@@ -70,6 +71,7 @@ def message(id):
         message.user_id = g.user.id
         models.db.session.add(message)
         models.db.session.commit()
+        tasks.send_message(message.id)
     return redirect(url_for('.ticket',id=id))
     
 @admin.route('/complete/<int:id>', methods=['POST'])
