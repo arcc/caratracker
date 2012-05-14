@@ -13,7 +13,7 @@ from .mailer import Mailer, Message
 #mail = Mail(app)
 mail = Mailer(app)
 
-def _get_admins()
+def _get_admins():
     return models.User.query.filter_by(admin=True).all()
 
 def send_message(id):
