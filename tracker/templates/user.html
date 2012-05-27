@@ -45,7 +45,7 @@
                       <tr>
                         <td><a
                            href="{{url_for('review',referrer=ticket.id|referrer)}}">
-                            {{ticket.title}}</a></td>
+                            {{ticket.title|truncate(70)}}</a></td>
                         <td>{{ticket.status}}</td>
                       </tr>
                       {%- endfor %}
@@ -65,7 +65,7 @@
                       <tr>
                         <td><a
                            href="{{url_for('review',referrer=ticket.id|referrer)}}">
-                            {{ticket.title}}</a></td>
+                            {{ticket.title|truncate(70)}}</a></td>
                         <td>{{ticket.status}}</td>
                       </tr>
                       {%- endfor %}
