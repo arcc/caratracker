@@ -25,25 +25,56 @@
       <div class="span8">
         <div class="row">
           <div class="span8">
-            <table class='table table-striped'>
-              <colgroup>
-                <col class='span5'> <col class='span3'>
-              </colgroup>
-              <thead><tr>
-                <th>Subject</th> <th>Status</th>
-              </tr></thead>
-              <tbody>
-                {% for ticket in user.tickets.filter_by(completed=False) -%}
-                <tr>
-                  <td><a
-                      href="{{url_for('review',referrer=ticket.id|referrer)}}">
-                      {{ticket.title}}</a></td>
-                  <td>{{ticket.status}}</td>
-                </tr>
-                {%- endfor %}
-              </tbody>
-            </table>
-          </div>
+            <div class="tabbable">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#active"
+                  data-toggle="tab">Active</a></li>
+                <li><a href="#completed" data-toggle="tab">Completed</a></li>
+              </ul>
+              <div class="tab-content"><!-- TAB CONTENT -->
+                <div class="tab-pane active" id="active">
+                  <table class='table table-striped'>
+                    <colgroup>
+                      <col class='span5'> <col class='span3'>
+                    </colgroup>
+                    <thead><tr>
+                      <th>Subject</th> <th>Status</th>
+                    </tr></thead>
+                    <tbody>
+                      {%for ticket in user.tickets.filter_by(completed=False)-%}
+                      <tr>
+                        <td><a
+                           href="{{url_for('review',referrer=ticket.id|referrer)}}">
+                            {{ticket.title}}</a></td>
+                        <td>{{ticket.status}}</td>
+                      </tr>
+                      {%- endfor %}
+                    </tbody>
+                  </table>
+                </div><!-- /tab 1 -->
+                <div class="tab-pane" id="completed">
+                  <table class='table table-striped'>
+                    <colgroup>
+                      <col class='span5'> <col class='span3'>
+                    </colgroup>
+                    <thead><tr>
+                      <th>Subject</th> <th>Status</th>
+                    </tr></thead>
+                    <tbody>
+                      {%for ticket in user.tickets.filter_by(completed=True)-%}
+                      <tr>
+                        <td><a
+                           href="{{url_for('review',referrer=ticket.id|referrer)}}">
+                            {{ticket.title}}</a></td>
+                        <td>{{ticket.status}}</td>
+                      </tr>
+                      {%- endfor %}
+                    </tbody>
+                  </table>
+                </div><!-- /tab   2-->
+              </div><!-- /tab-content -->
+            </div><!--/tabbable -->
+          </div><!--/span8 -->
         </div>
       </div>
     </div>
