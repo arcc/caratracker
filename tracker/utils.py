@@ -4,7 +4,8 @@ from os import path, unlink
 from werkzeug import secure_filename
 from flask import (make_response,redirect, url_for,
                     render_template,json,request,flash,session)
-from itsdangerous import URLSafeSerializer
+
+from itsdangerous import URLSafeSerializer, BadSignature
 
 from . import app
 from . import models

@@ -60,3 +60,7 @@ class Profile(Form):
     email=TextField('Email', validators=[Required(),Email()])
     student_id=TextField('Student ID', validators=[Required()])
 
+class Upload(Form):
+    file_upload=FileField('', validators=[file_allowed(allowed, 
+                                        "Unsupported File Type")])
+

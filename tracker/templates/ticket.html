@@ -47,6 +47,18 @@
                       <td>Comments</td>
                       <td>{{ticket.comment}}</td>
                     </tr>
+                    <tr>
+                      <td>Upload File</td>
+                      <td><form
+                          action="{{url_for('.upload',referrer=referrer)}}"
+                          method="POST" enctype="multipart/form-data"
+                          class="form-inline">
+                          {{ fileform.hidden_tag() }}
+                          {{field(fileform,'file_upload')}}
+                          <input type="submit" class="btn btn-primary"
+                              value='Upload'> 
+                        </form></td>
+                    </tr>
                   </tbody>
                 </table>
               </div> <!--Table 1 containter--> 
@@ -55,41 +67,84 @@
         </div> <!--/Col 1--> 
 
         <div class="span7"> <!--Col 2--> 
-          <div class="page-header">
-            <h1>Messages</h1>
-          </div>
-          <div class="row">
-            <div class="span7 well">
-              <form action="{{ url_for(request.endpoint,referrer=referrer) }}" 
-                method="POST" class="form-inline">
-                {{ form.hidden_tag() }}
-                <fieldset>
-                  {{ field(form,'text',fieldclass='span7',rows=3) }}
-                  <div class="pull-right">
-                    <input type="submit" class="btn btn-primary" value='Submit'>
-                    <input type="reset" class="btn" value='Cancel'>
+          <div class="tabbable">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#messages" data-toggle="tab">Messages</a></li>
+              <li><a href="#files" data-toggle="tab">Files
+                ({{ticket.files.count()}})</a></li>
+            </ul>
+            <div class='tab-content'> <!--TAB CONTENT--> 
+              <div class='tab-pane active' id='messages'> <!--TAB PANE 1--> 
+                <div class="span6 well">
+                  <form action="{{url_for('.message',referrer=referrer)}}" 
+                    method="POST" class="form-inline">
+                    {{ msgform.hidden_tag() }}
+                    <fieldset>
+                      {{ field(msgform,'text',fieldclass='span6',rows=3) }}
+                      <div class="pull-right">
+                        <input type="submit" class="btn btn-primary"
+                          value='Submit'>
+                        <input type="reset" class="btn" value='Cancel'>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                {% for message in ticket.messages %}
+                <div class="row">
+                  <div class="span6  well">
+                    <div class="badge pull-right">
+                      {{ message.created }}
+                    </div>
+                    <p>{{ message.text }}</p>
+                    <p class="pull-right"> -- {{ message.user.name }}</p>
                   </div>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-          {% for message in ticket.messages|reverse %}
-          <div class="row">
-            <div class="span7 well">
-              <div class="badge pull-right">
-                {{ message.created }}
-              </div>
-              <p>{{ message.text }}</p>
-              <p class="pull-right"> -- {{ message.user.name}}</p>
-            </div>
-          </div>
-          {% else %}
-          <div class="row">
-            <div class="span7 well">
-              <h3>No Messages</h3>
-            </div>
-          </div>
-          {% endfor %}
-        </div> <!--/Col 2--> 
+                </div>
+                {% else %}
+                <div class="row">
+                  <div class="span6  well">
+                    <p>No Messages</p>
+                  </div>
+                </div>
+
+                {% endfor %}
+              </div><!-- TAB PANE 1 -->
+
+              <div class='tab-pane' id='files'> <!--TAB PANE 2--> 
+                <div class="row">
+                  <div class="span6  well">
+                    <table class='table table-striped'>
+                      <colgroup>
+                        <col class='span2'>
+                        <col class='span2'>
+                      </colgroup>
+                      <tbody>
+                        <tr>
+                          <th>Filename</th>
+                          <th>Uploaded</th>
+                        </tr>
+                        {% for f in ticket.files %}
+                        <tr>
+                          <td>
+                            <a href='{{url_for('uploaded',id=f.id)}}'>
+                              {{ f.name|noblank }}</a></td>
+                          {% if f.created %}
+                          <td>{{ f.created.strftime('%Y-%m-%d') }}</td>
+                          {% else %}
+                          <td>Unknown Creation Date</td>
+                          {% endif %}
+                        </tr>
+                        {% else %}
+                        <tr>
+                          <td> No Files </td>
+                        </tr>
+                        {%- endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div><!-- TAB PANE 2 -->
+            </div><!-- TAB CONTENT -->
+          </div><!-- TABBABLE -->
+        </div> <!--Col 2--> 
       </div>
     {% endblock container %}

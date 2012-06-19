@@ -1,9 +1,10 @@
 from hashlib import md5
+from functools import wraps
 
 from werkzeug import secure_filename
 from flask import (Flask, make_response,redirect, url_for,
                     render_template,json,request,flash,session,
-                    send_from_directory,)
+                    send_from_directory,abort,)
 from flask.ext.openid import OpenID
 
 app = Flask(__name__, static_url_path='/static', instance_relative_config=True)
@@ -53,26 +54,49 @@ def create():
 def confirmation():
     return render_template("confirmation.html")
 
+def referrer_verified(f):
+    @wraps(f)
+    def decorated_function(*args,**kwargs):
+        referrer = request.view_args.get('referrer',None)
+        if referrer is None:
+            abort(404)
+        bad_referrer = render_template('message.html',layout="layout.html",
+            heading="Invalid Request Referrer", 
+            message="""Please check the link that you recieved. If you think you
+            are recieving this error in error, please contact the CARA
+            Office.""")
+        try:
+            id = utils.serializer.loads(referrer)
+        except utils.BadSignature:
+            return bad_referrer
+
+        ticket = models.Ticket.query.get(id)
+
+        if g.user.id != ticket.user_id:
+            session['denied']= "You are not the owner of this request"
+            return redirect(url_for('permission_denied'))
+
+        if ticket is None:
+            return bad_referrer
+
+        return f(*args, ticket=ticket, **kwargs)
+    return decorated_function
+
 @app.route('/review/<referrer>', methods=['GET','POST'])
 @login_required
-def review(referrer):
-    bad_referrer = render_template('message.html',layout="layout.html",
-        heading="Invalid Request Referrer", 
-        message="""Please check the link that you recieved. If you think you are
-        recieving this error in error, please contact the CARA Office.""")
-    try:
-        id = utils.serializer.loads(referrer)
-    except utils.itsdangerous.BadSignature:
-        return bad_referrer
+@referrer_verified
+def review(referrer, ticket):
 
-    ticket = models.Ticket.query.get(id)
+    msgform = forms.Message()
+    fileform = forms.Upload()
 
-    if g.user.id != ticket.user_id:
-        session['denied']= "You are not the owner of this request"
-        return redirect(url_for('permission_denied'))
+    return render_template('ticket.html',ticket=ticket, referrer=referrer,
+            msgform=msgform, fileform=fileform)
 
-    if ticket is None:
-        return bad_referrer
+@app.route('/review/message/<referrer>', methods=['POST'])
+@login_required
+@referrer_verified
+def message(referrer, ticket):
 
     form = forms.Message()
 
@@ -84,10 +108,21 @@ def review(referrer):
         models.db.session.add(message)
         models.db.session.commit()
         tasks.send_reply(message.id)
-        return redirect(url_for('review',referrer=referrer))
 
-    return render_template('ticket.html',ticket=ticket, referrer=referrer,
-            form=form)
+    return redirect(url_for('review',referrer=referrer))
+
+@app.route('/review/upload/<referrer>', methods=['POST'])
+@login_required
+@referrer_verified
+def upload(referrer, ticket):
+    form = forms.Upload()
+
+    if form.validate_on_submit():
+        attachment = form.file_upload.data
+        if attachment:
+            utils.new_file(attachment, ticket.id)
+
+    return redirect(url_for('review',referrer=referrer))
 
 @app.route('/user', methods=['GET','POST'])
 @login_required
