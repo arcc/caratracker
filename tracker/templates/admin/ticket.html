@@ -80,7 +80,8 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#notes" data-toggle="tab">Notes</a></li>
             <li><a href="#messages" data-toggle="tab">Messages</a></li>
-            <li><a href="#files" data-toggle="tab">Files</a></li>
+            <li><a href="#files" data-toggle="tab">Files
+              ({{ticket.files.count()}})</a></li>
           </ul>
           <div class='tab-content'> <!--TAB CONTENT--> 
             <div class='tab-pane active' id='notes'> <!--TAB PANE 1--> 
@@ -145,8 +146,13 @@
                   <table class='table table-striped'>
                     <colgroup>
                       <col class='span2'>
+                      <col class='span2'>
                     </colgroup>
                     <tbody>
+                      <tr>
+                        <th>Filename</th>
+                        <th>Uploaded</th>
+                      </tr>
                       {% for f in ticket.files %}
                       <tr>
                         <td>
