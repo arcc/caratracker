@@ -142,7 +142,7 @@ def user(id):
 @admin_required
 def archives():
     tickets = models.Ticket.query.filter(models.Ticket.completed == True)
-    tickets = tickets.order_by(models.Ticket.priority.desc()).all()
+    tickets = tickets.order_by(models.Ticket.id).all()
     return render_template('admin/index.html', tickets = tickets)
 
 @admin.route('/archives/categories')
