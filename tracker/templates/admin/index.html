@@ -20,7 +20,7 @@
               <td><a href="{{url_for('admin.ticket',id=ticket.id)}}">
                   {{ticket.id}}</a></td>
               <td><a href="{{url_for('admin.ticket',id=ticket.id)}}">
-                  {{ticket.title}}</a></td>
+                  {{ticket.title|truncate(70)}}</a></td>
               {%- if ticket.category -%}
               <td><a href={{url_for('admin.category',id=ticket.category.id)}}>
                   {{ticket.category.name}}</a></td>
