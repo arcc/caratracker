@@ -19,7 +19,7 @@ from .manage import *
 @admin_required
 def index():
     tickets = models.Ticket.query.filter(models.Ticket.completed == False)
-    tickets = tickets.order_by(models.Ticket.priority.desc()).all()
+    tickets = tickets.order_by(models.Ticket.id).all()
     return render_template('admin/index.html', tickets = tickets)
 
 @admin.route('/ticket/<int:id>', methods=['POST','GET'])
