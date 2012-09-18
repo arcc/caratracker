@@ -108,11 +108,15 @@ def elevate_user(id):
 @admin.route('/manage/users/lower/<int:id>')
 @admin_required
 def lower_user(id):
-    user = models.User.query.get_or_404(id)
-    user.admin=False
-    user.can_elevate=False
-    models.db.session.commit()
-    flash('User %s has lost admin status.'%user.name)
+    if models.User.query.filter_by(admin=True).count() > 1:
+        user = models.User.query.get_or_404(id)
+        user.admin=False
+        user.can_elevate=False
+        models.db.session.commit()
+        flash('User %s has lost admin status.'%user.name)
+    else:
+        flash("""This is the last admin. Please elevate another admin before
+        revoking this user's privliges.""")
 
     return redirect(url_for('.user', id=id))
 
@@ -131,10 +135,14 @@ def bless_user(id):
 @admin_required
 @elevation_required
 def damn_user(id):
-    user = models.User.query.get_or_404(id)
-    user.can_elevate=False
-    models.db.session.commit()
-    flash('User %s has lost elevation privileges.'%user.name)
+    if models.User.query.filter_by(can_elevate=True).count() > 1:
+        user = models.User.query.get_or_404(id)
+        user.can_elevate=False
+        models.db.session.commit()
+        flash('User %s has lost elevation privileges.'%user.name)
+    else:
+        flash("""This is the last blessed admin. Please bless another admin
+            before revoking this user's privliges.""")
 
     return redirect(url_for('.user', id=id))
 
