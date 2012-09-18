@@ -1,5 +1,5 @@
 from flask import (render_template, abort, request, url_for,
-                    flash, redirect, make_response)
+                    flash, redirect, make_response, g, )
 
 from .admin import admin
 from . import models
