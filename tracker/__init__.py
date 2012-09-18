@@ -45,6 +45,7 @@ def create():
         if attachment:
             utils.new_file(attachment, ticket.id)
         tasks.send_confirmation(ticket.id)
+        tasks.send_alert(ticket.id)
         return redirect(url_for('confirmation'))
     
     return render_template("create.html",form=form, catid=cat.id)

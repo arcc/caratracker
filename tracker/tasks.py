@@ -26,6 +26,19 @@ def send_message(id):
     except SMTPException as error:
         app.logger.warning("SMTP Error\n%s"%error)
 
+def send_alert(id):
+    ticket = models.Ticket.query.get(id)
+    email = Message("[CARA-RT] New Request #%s"%ticket.id)
+    email.html = render_template('email/new.html', ticket=ticket)
+    admins = _get_admins()
+    email.recipients = [ x.email for x in admins ]
+
+    try:
+        mail.send(email)
+    except SMTPException as error:
+        app.logger.warning("SMTP Error\n%s"%error)
+
+
 def send_reply(id):
     message = models.Message.query.get(id)
     email = Message("[CARA-RT] Request #%s"%message.ticket_id)

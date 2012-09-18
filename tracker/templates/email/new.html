@@ -1,0 +1,23 @@
+{% extends "email/base.html" %}
+
+{% block content %}
+<tr><td><p>There is a new request on the <a
+            href="{{url_for('.index')}}">Tracker</a></p></td></tr>
+<tr><td>
+        <table id='Info'>
+        <tr><td align='left'>Subject:</td>
+            <td align='left'>{{ticket.title}}</td></tr>
+        <tr><td align='left'>Category:</td>
+            <td align='left'>{{ticket.category.name}}</td></tr>
+        <tr><td align='left'>Created On:</td>
+            <td align='left'>{{ticket.created.strftime("%Y-%m-%d")}}
+            </td></tr>
+        </table></td></tr>
+<tr><td><p>{{ticket.description}}</p></td></tr>
+<tr><td><p>You can reply online at 
+    <a href="{{url_for("admin.ticket",id=ticket.id,_external=True)}}">
+        {{url_for("admin.ticket",id=ticket.id,_external=True)}}
+    </a></p></td></tr>
+<tr><td><p>NOTE: Do not reply to this email, as this inbox in not checked.
+        </p></td></tr>
+{% endblock %}
