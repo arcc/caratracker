@@ -137,3 +137,12 @@ def damn_user(id):
     flash('User %s has lost elevation privileges.'%user.name)
 
     return redirect(url_for('.user', id=id))
+
+@admin.route('manage/users/alert_new/<int:set>')
+@admin_required
+def alert_new(set):
+    user = g.user
+    user.alert_new = bool(set)
+    models.db.session.commit()
+    return redirect(url_for('.user', id=user.id))
+

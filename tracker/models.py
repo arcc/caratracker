@@ -50,6 +50,7 @@ class User(db.Model):
     tickets = db.relationship("Ticket",backref="user",lazy='dynamic')
     messages = db.relationship("Message",backref="user",lazy='dynamic')
     notes = db.relationship("Note",backref="user",lazy='dynamic')
+    alert_new=db.Column(db.Boolean,default=False)
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -33,6 +33,16 @@
         <table class="span8">
           <tr>
             {% if user.admin %}
+              {% if (g.user.id == user.id) %}
+                {% if  user.alert_new %}
+                <td> <a href='{{url_for('.alert_new',set=False)}}'
+                    class="btn btn-danger">Stop New Request Alerts</a></td>
+                {% else %}
+                <td> <a href='{{url_for('.alert_new',set=True)}}'
+                    class="btn btn-success">Start New Request Alerts</a></td>
+                {% endif %}
+                </tr><tr>
+              {% endif %}
             <td> <a href='{{url_for('.lower_user',id=user.id)}}' 
                 class="btn btn-danger">Remove Admin Privileges</a></td>
             {% else %}
