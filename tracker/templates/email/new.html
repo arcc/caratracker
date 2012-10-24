@@ -1,8 +1,8 @@
 {% extends "email/base.html" %}
 
 {% block content %}
-<tr><td><p>There is a new request on the <a
-            href="{{url_for('.index')}}">Tracker</a></p></td></tr>
+<tr><td><p>There is a new request on the 
+        <a href="{{url_for('.index',_external=True)}}">Tracker</a></p></td></tr>
 <tr><td>
         <table id='Info'>
         <tr><td align='left'>Subject:</td>
