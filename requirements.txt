@@ -1,5 +1,4 @@
 flask>=0.8
-git+git@github.com:ajford/flask-script.git
 Flask-WTF>=0.5.2
 wtforms>=0.6
 itsdangerous
