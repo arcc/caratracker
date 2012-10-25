@@ -7,18 +7,20 @@
       <div class="span10 offset1">
         <table class='table table-striped'>
           <colgroup>
-            <col class='span1'><col class='span2'> <col class='span2'> 
-            <col class='span2'> <col class='span2'> <col class='span1'>
+            <col class='span1'> <col class='span1'> <col class='span2'> 
+            <col class='span2'> <col class='span2'> <col class='span2'> 
+            <col class='span1'>
           </colgroup>
           <thead><tr>
-            <th>ID</th> <th>Subject</th> <th>Category</th> <th>Status</th>
-            <th>Owner</th> <th>Priority</th>
+            <th>ID</th> <th>Created</th> <th>Subject</th> <th>Category</th>
+            <th>Status</th> <th>Owner</th> <th>Priority</th>
           </tr></thead>
           <tbody>
             {% for ticket in tickets -%}
             <tr>
               <td><a href="{{url_for('admin.ticket',id=ticket.id)}}">
                   {{ticket.id}}</a></td>
+              <td>{{ticket.created}}</td>
               <td><a href="{{url_for('admin.ticket',id=ticket.id)}}">
                   {{ticket.title|truncate(70)}}</a></td>
               {%- if ticket.category -%}
