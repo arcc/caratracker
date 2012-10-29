@@ -26,7 +26,11 @@
               {{ navlink('logout','Log Out',) }}
             </ul>
             <ul class="nav pull-right">
-              {% call dropdown('Manage', 'icon-cog icon-white') %}
+              {% if unapproved != 0 %}
+                {% set unapproved_badge =  ('badge-error','!') %}
+              {% endif %}
+              {% call dropdown('Manage', 'icon-cog icon-white',
+                unapproved_badge) %}
                 {{ navlink('.manage_categories', 'Manage Categories')}}
                 {{ navlink('.manage_users', 'Manage Users')}}
               {% endcall %}

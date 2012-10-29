@@ -1,7 +1,7 @@
-from flask import (render_template, abort, request, url_for,
+from flask import (abort, request, url_for,
                     flash, redirect, make_response, g, )
 
-from .admin import admin
+from .admin import admin, render_template
 from . import models
 from . import forms
 from . import utils

@@ -1,7 +1,11 @@
 from datetime import date
 
-from flask import (Blueprint, render_template, abort, request, url_for,
+from flask import (Blueprint, abort, request, url_for,
                     flash, redirect, make_response, g)
+
+from flask import render_template as render
+
+    
 
 from . import app
 from . import models
@@ -13,7 +17,13 @@ from .auth import admin_required
 admin = Blueprint('admin', __name__, template_folder='templates',
                 static_folder='static')
 
+def render_template(*args,**kwargs):
+    unapproved = models.User.query.filter_by(approved=False).count()
+    return render(*args,unapproved=unapproved,**kwargs)
+
 from .manage import *
+
+
 
 @admin.route('/')
 @admin_required
