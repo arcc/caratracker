@@ -139,7 +139,7 @@ def categories():
 @admin.route('/users')
 @admin_required
 def users():
-    users = models.User.query.order_by('name').all()
+    users = models.User.query.order_by('name').filter_by(suspended=False).all()
     return render_template('admin/users.html', users = users)
 
 @admin.route('/user/<int:id>')
@@ -161,4 +161,10 @@ def archives_categories():
     categories = models.Category.query.order_by('name').all()
     return render_template('admin/archive_categories.html', 
             categories = categories)
+
+@admin.route('/archives/users')
+@admin_required
+def archives_users():
+    users = models.User.query.order_by('name').filter_by(suspended=True).all()
+    return render_template('admin/users.html', users = users)
 
